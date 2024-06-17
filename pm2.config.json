@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "sms-noti-manager",
+      "cwd": "src",
+      "script": "ts-node server/server.ts",
+      "watch": true,
+      "autorestart": true,
+      "exec_mode": "cluster",
+      "instances": 3
+    }
+  ]
+}
