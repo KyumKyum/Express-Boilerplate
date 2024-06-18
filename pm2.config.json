@@ -2,8 +2,8 @@
     "apps": [
         {
             "name": "sms-noti-manager",
-            "cwd": "src",
-            "script": "ts-node server/server.ts",
+            "cwd": "./",
+            "script": "dist/server.js",
             "watch": true,
             "autorestart": true,
             "exec_mode": "cluster",
