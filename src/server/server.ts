@@ -8,6 +8,8 @@ import corsGuard from '../middleware/cors.guard';
 import cookieParser from 'cookie-parser';
 import loggingInterceptor from '../middleware/logging.interceptor';
 import exceptionFilter from "../middleware/exception.filter";
+import hc, {StatusIndicator} from "./healthChecker";
+import * as process from "node:process";
 
 const mode = process.env.NODE_ENV;
 const welcomeMsg =
@@ -48,8 +50,19 @@ server.get('/', (req: Request, res: Response) => {
 
 const port = Number.parseInt(config.SERV_PORT);
 
-server.listen(port, () => {
-    logger.info(`🚀 Bootstrapped! Server is running at http://localhost:${port} 🚀`);
-});
+logger.info('⚙️Bootstrapping... Waiting all dependent services being alive...⚙️');
 
+hc.subscribe({
+    next: ({source, status}: StatusIndicator) => {
+        logger.info(`${source} - ${status}`)
+    },
+    complete: () => {server.listen(port, () => {
+        logger.info(`🚀 Bootstrapped! Server is running at http://localhost:${port} 🚀`);
+    });
+    },
+    error: ({source, status}: StatusIndicator) => {
+        logger.error(`Server Failed to initialized: ${status} - Source: ${source}`);
+        process.exit(1);
+    }
+})
 export default server;

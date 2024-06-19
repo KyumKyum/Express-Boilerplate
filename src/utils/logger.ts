@@ -34,7 +34,7 @@ const winstonTimestampFormat = winston.format.timestamp({
 });
 
 const winstonLogFormat = winston.format.printf(({ timestamp, level, message }, ...rest) => {
-    return `[${timestamp}] ${level.toUpperCase()}: ${message} ${rest}`;
+    return `[${timestamp}] ${level}: ${message} ${rest}`;
 });
 
 /** Format */

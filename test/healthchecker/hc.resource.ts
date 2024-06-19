@@ -9,7 +9,7 @@ class HealthChecker {
 
     constructor() {
         //* Basic status
-        this._monitor.next(SystemStatus.PULSE)
+        this._monitor.next(SystemStatus.BOOTSTRAPPED)
 
         this.subscribeSample();
 
@@ -26,7 +26,7 @@ class HealthChecker {
                     //* DEAD!
                     this.changeStatus('sample', SystemStatus.FLATLINE)
                 }else{
-                    this.changeStatus('sample', SystemStatus.PULSE)
+                    this.changeStatus('sample', SystemStatus.BOOTSTRAPPED)
                 }
             },
             error: (err) => {

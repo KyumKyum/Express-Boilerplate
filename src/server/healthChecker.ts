@@ -1,51 +1,53 @@
+import _ from 'lodash';
+
 import {Observable, Subject} from "rxjs";
 import {SystemStatus} from "../constants/SystemStatus";
-import sampleHcObservable from "../provider/hc/sample.hc";
-import logger from "../utils/logger";
+
+export interface StatusIndicator {
+    source: Service;
+    status: SystemStatus;
+}
+
+enum Service {
+    SERVER= 'server',
+}
 
 class HealthChecker {
-    private _monitor = new Subject<SystemStatus>();
-    public source: string = ''
-
+    private _monitor = new Subject<StatusIndicator>();
+    private servicesStatus: { [key in Service]: SystemStatus } = {
+        [Service.SERVER]: SystemStatus.FLATLINE,
+    };
 
     constructor() {
-        //* Basic status
-        this._monitor.next(SystemStatus.PULSE)
+        this.updateServiceStatus(Service.SERVER, SystemStatus.INITIALIZING)
 
-        this.subscribeSample();
+        // Subscribe to dependent services
+        //this.subscribeSample('sampleService');
 
+        // Start checking the overall system status
+        this.updateServiceStatus(Service.SERVER, SystemStatus.BOOTSTRAPPED)
+        this.checkAllServices();
     }
 
-    public get monitor(): Observable<SystemStatus> {
+    public get monitor(): Observable<StatusIndicator> {
         return this._monitor.asObservable();
     }
 
-    private subscribeSample() {
-        sampleHcObservable.subscribe({
-            next: (status: SystemStatus) => {
-                if(status === SystemStatus.FLATLINE) {
-                    //* DEAD!
-                    this.changeStatus('sample', SystemStatus.FLATLINE)
-                }else{
-                    this.changeStatus('sample', SystemStatus.PULSE)
-                }
-            },
-            error: (err) => {
-                logger.error(`Error for health check!: ${err}`);
-                this.changeStatus('sample', SystemStatus.FLATLINE)
-            }
-        })
+    private updateServiceStatus(source: Service, status: SystemStatus) {
+        this.servicesStatus[source] = status;
+        this._monitor.next({ status, source });
+
+        this.checkAllServices();
     }
 
-    private changeStatus(source:string, status: SystemStatus){
-        this.source = source;
-        this._monitor.next(status);
+    private checkAllServices() {
+        const allServicesAlive = _.every(this.servicesStatus, status => status === SystemStatus.BOOTSTRAPPED);
+
+        if (allServicesAlive) {
+            this._monitor.complete(); //* Bootstrapped!
+        }
     }
-
-
 }
 
 const hc = new HealthChecker().monitor;
 export default hc;
-
-// export default hc;

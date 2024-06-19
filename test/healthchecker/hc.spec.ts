@@ -31,12 +31,22 @@ describe('HealthChecker', () => {
 
     it('should change status to PULSE when sample is alive', (done) => {
         hc.subscribe((status) => {
-            if (status === SystemStatus.PULSE) {
+            if (status === SystemStatus.BOOTSTRAPPED) {
                 done();
             }
         });
 
-        mockSubject.next(SystemStatus.PULSE);
+        mockSubject.next(SystemStatus.BOOTSTRAPPED);
+    });
+
+    it('should change status to INITIALIZING when sample is initializing', (done) => {
+        hc.subscribe((status) => {
+            if (status === SystemStatus.INITIALIZING) {
+                done();
+            }
+        });
+
+        mockSubject.next(SystemStatus.INITIALIZING);
     });
 
 });

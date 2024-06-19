@@ -9,7 +9,7 @@ class SampleHc {
     }
 
     public isReady() {
-        this._subject.next(SystemStatus.PULSE)
+        this._subject.next(SystemStatus.BOOTSTRAPPED)
     }
 
     public isDead(){

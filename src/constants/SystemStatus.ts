@@ -1,4 +1,5 @@
 export enum SystemStatus {
-    PULSE = 'PULSE', //* System Alive
+    INITIALIZING = 'INITIALIZING', //* System Initializing
+    BOOTSTRAPPED = 'BOOTSTRAPPED', //* System Alive
     FLATLINE = 'FLATLINE' //* System Dead
 }
