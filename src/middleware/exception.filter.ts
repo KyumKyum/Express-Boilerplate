@@ -1,10 +1,10 @@
-import express from 'express';
+import {ErrorRequestHandler} from 'express';
 import HttpException from '../exceptions/common/http.exception';
 import httpStatus, { HttpStatus } from 'http-status';
 import logger from "../utils/logger";
 import ValidationException from "../exceptions/common/validation.exception";
 
-const exceptionFilter = (): express.ErrorRequestHandler => {
+const exceptionFilter = (): ErrorRequestHandler => {
     return (err, req, res, next) => {
         let status: number = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
         let body: any = {};

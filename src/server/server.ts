@@ -10,6 +10,7 @@ import loggingInterceptor from '../middleware/logging.interceptor';
 import exceptionFilter from "../middleware/exception.filter";
 import hc, {StatusIndicator} from "./healthChecker";
 import * as process from "node:process";
+import rootController from "../controllers/root.controller";
 
 const mode = process.env.NODE_ENV;
 const welcomeMsg =
@@ -25,8 +26,8 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(cookieParser());
 
-/** Second Phase: Apply middlewares, guards and interceptors */
-
+/** Second Phase: Apply middlewares, guards and interceptors, router */
+//
 if (mode !== 'production') {
     //* Allow CORS on dev mode
     logger.info('🛠️[DEV MODE]: Allow cors for all origin.🛠️');
@@ -36,18 +37,15 @@ if (mode !== 'production') {
     server.use(corsGuard); //* CORS global Guard
 }
 //
+
+/** Third Phase: Apply controllers */
+server.use("/", rootController)
+
+
 server.use(loggingInterceptor); //* Logger Middleware
 server.use(exceptionFilter) //* Exception Middleware
 
-/** Third Phase: Apply routers */
-//TODO
-
 /** Final Phase: Bootstrap */
-
-server.get('/', (req: Request, res: Response) => {
-    res.send('Typescript + Node.js + Express Server');
-});
-
 const port = Number.parseInt(config.SERV_PORT);
 
 logger.info('⚙️Bootstrapping... Waiting all dependent services being alive...⚙️');
