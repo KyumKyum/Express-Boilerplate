@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import {Observable, Subject} from "rxjs";
-import {SystemStatus} from "../constants/SystemStatus";
+import { Observable, Subject } from 'rxjs';
+import { SystemStatus } from '../constants/SystemStatus';
 
 export interface StatusIndicator {
     source: Service;
@@ -9,7 +9,7 @@ export interface StatusIndicator {
 }
 
 enum Service {
-    SERVER= 'server',
+    SERVER = 'server',
 }
 
 class HealthChecker {
@@ -19,13 +19,13 @@ class HealthChecker {
     };
 
     constructor() {
-        this.updateServiceStatus(Service.SERVER, SystemStatus.INITIALIZING)
+        this.updateServiceStatus(Service.SERVER, SystemStatus.INITIALIZING);
 
         // Subscribe to dependent services
         //this.subscribeSample('sampleService');
 
         // Start checking the overall system status
-        this.updateServiceStatus(Service.SERVER, SystemStatus.BOOTSTRAPPED)
+        this.updateServiceStatus(Service.SERVER, SystemStatus.BOOTSTRAPPED);
         this.checkAllServices();
     }
 
@@ -41,7 +41,7 @@ class HealthChecker {
     }
 
     private checkAllServices() {
-        const allServicesAlive = _.every(this.servicesStatus, status => status === SystemStatus.BOOTSTRAPPED);
+        const allServicesAlive = _.every(this.servicesStatus, (status) => status === SystemStatus.BOOTSTRAPPED);
 
         if (allServicesAlive) {
             this._monitor.complete(); //* Bootstrapped!

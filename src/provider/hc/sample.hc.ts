@@ -1,23 +1,22 @@
-import {Observable, Subject} from "rxjs";
-import {SystemStatus} from "../../constants/SystemStatus";
+import { Observable, Subject } from 'rxjs';
+import { SystemStatus } from '../../constants/SystemStatus';
 
 class SampleHc {
     private _subject = new Subject<SystemStatus>();
 
     public get observable(): Observable<SystemStatus> {
-        return this._subject.asObservable()
+        return this._subject.asObservable();
     }
 
     public isReady() {
-        this._subject.next(SystemStatus.BOOTSTRAPPED)
+        this._subject.next(SystemStatus.BOOTSTRAPPED);
     }
 
-    public isDead(){
-        this._subject.next(SystemStatus.FLATLINE)
+    public isDead() {
+        this._subject.next(SystemStatus.FLATLINE);
     }
 }
 
 const sampleHc = new SampleHc();
-const sampleHcObservable = sampleHc.observable
+const sampleHcObservable = sampleHc.observable;
 export default sampleHcObservable;
-

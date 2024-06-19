@@ -1,8 +1,8 @@
-import {ErrorRequestHandler} from 'express';
+import { ErrorRequestHandler } from 'express';
 import HttpException from '../exceptions/common/http.exception';
 import httpStatus, { HttpStatus } from 'http-status';
-import logger from "../utils/logger";
-import ValidationException from "../exceptions/common/validation.exception";
+import logger from '../utils/logger';
+import ValidationException from '../exceptions/common/validation.exception';
 
 const exceptionFilter = (): ErrorRequestHandler => {
     return (err, req, res, next) => {
@@ -11,8 +11,8 @@ const exceptionFilter = (): ErrorRequestHandler => {
         //* Catch HttpException
         if (err instanceof HttpException) {
             status = err.statusCode;
-            if(status === httpStatus.NOT_FOUND){
-                body.path = req.path
+            if (status === httpStatus.NOT_FOUND) {
+                body.path = req.path;
             }
             body.reason = 'Http Exception';
         }

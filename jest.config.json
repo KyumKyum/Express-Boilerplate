@@ -1,9 +1,7 @@
 {
     "preset": "ts-jest",
     "rootDir": ".",
-    "testMatch": [
-        "**/?(*.)(spec).ts?(x)"
-    ],
+    "testMatch": ["**/?(*.)(spec).ts?(x)"],
     "testEnvironment": "node",
     "resetMocks": true,
     "clearMocks": true

@@ -26,7 +26,7 @@ const winstonLogLevels = {
 };
 
 /** Formats */
-const winstonLogColorize = winston.format.colorize({ all: true }) // Colorize all log levels
+const winstonLogColorize = winston.format.colorize({ all: true }); // Colorize all log levels
 const winstonLogAlign = winston.format.align();
 
 const winstonTimestampFormat = winston.format.timestamp({
@@ -74,9 +74,8 @@ const logger = winston.createLogger({
     level: mode === 'development' ? 'debug' : 'http', //* Default level
     format: winstonFormat,
     transports: mode === 'development' ? [new winston.transports.Console()] : [winstonErrorTransport],
-    exceptionHandlers: mode === 'development' ? new winston.transports.Console : winstonExceptionTransport,
+    exceptionHandlers: mode === 'development' ? new winston.transports.Console() : winstonExceptionTransport,
     exitOnError: false,
 });
-
 
 export default logger;

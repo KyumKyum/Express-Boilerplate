@@ -7,10 +7,10 @@ import logger from '../utils/logger';
 import corsGuard from '../middleware/cors.guard';
 import cookieParser from 'cookie-parser';
 import loggingInterceptor from '../middleware/logging.interceptor';
-import exceptionFilter from "../middleware/exception.filter";
-import hc, {StatusIndicator} from "./healthChecker";
-import * as process from "node:process";
-import rootController from "../controllers/root.controller";
+import exceptionFilter from '../middleware/exception.filter';
+import hc, { StatusIndicator } from './healthChecker';
+import * as process from 'node:process';
+import rootController from '../controllers/root.controller';
 
 const mode = process.env.NODE_ENV;
 const welcomeMsg =
@@ -39,11 +39,10 @@ if (mode !== 'production') {
 //
 
 /** Third Phase: Apply controllers */
-server.use("/", rootController)
-
+server.use('/', rootController);
 
 server.use(loggingInterceptor); //* Logger Middleware
-server.use(exceptionFilter) //* Exception Middleware
+server.use(exceptionFilter); //* Exception Middleware
 
 /** Final Phase: Bootstrap */
 const port = Number.parseInt(config.SERV_PORT);
@@ -51,16 +50,17 @@ const port = Number.parseInt(config.SERV_PORT);
 logger.info('⚙️Bootstrapping... Waiting all dependent services being alive...⚙️');
 
 hc.subscribe({
-    next: ({source, status}: StatusIndicator) => {
-        logger.info(`${source} - ${status}`)
+    next: ({ source, status }: StatusIndicator) => {
+        logger.info(`${source} - ${status}`);
     },
-    complete: () => {server.listen(port, () => {
-        logger.info(`🚀 Bootstrapped! Server is running at http://localhost:${port} 🚀`);
-    });
+    complete: () => {
+        server.listen(port, () => {
+            logger.info(`🚀 Bootstrapped! Server is running at http://localhost:${port} 🚀`);
+        });
     },
-    error: ({source, status}: StatusIndicator) => {
+    error: ({ source, status }: StatusIndicator) => {
         logger.error(`Server Failed to initialized: ${status} - Source: ${source}`);
         process.exit(1);
-    }
-})
+    },
+});
 export default server;
