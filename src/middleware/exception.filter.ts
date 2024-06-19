@@ -4,7 +4,7 @@ import httpStatus, { HttpStatus } from 'http-status';
 import logger from "../utils/logger";
 import ValidationException from "../exceptions/common/validation.exception";
 
-const exceptionMiddleware = (): express.ErrorRequestHandler => {
+const exceptionFilter = (): express.ErrorRequestHandler => {
     return (err, req, res, next) => {
         let status: number = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
         let body: any = {};
@@ -32,4 +32,4 @@ const exceptionMiddleware = (): express.ErrorRequestHandler => {
     };
 };
 
-export default exceptionMiddleware;
+export default exceptionFilter;

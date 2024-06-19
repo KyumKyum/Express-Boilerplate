@@ -15,6 +15,6 @@ const corsOptions = {
     credentials: false,
 };
 
-const corsMiddleware = cors(corsOptions);
+const corsGuard = cors(corsOptions);
 
-export default corsMiddleware;
+export default corsGuard;

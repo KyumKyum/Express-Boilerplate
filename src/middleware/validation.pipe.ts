@@ -1,9 +1,9 @@
 import {NextFunction} from "express";
-import ajv from "../provider/ajv.provider";
+import ajv from "../utils/ajv";
 import HttpException from "../exceptions/common/http.exception";
 import httpStatus from "http-status";
 
-const validateRequestInterceptor = (schemaName: string) => {
+const validationPipe = (schemaName: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const validate = ajv.getSchema(schemaName);
 

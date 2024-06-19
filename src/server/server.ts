@@ -4,10 +4,10 @@ import cors from 'cors';
 
 import config from '../config/config';
 import logger from '../utils/logger';
-import corsMiddleware from '../middleware/cors.middleware';
+import corsGuard from '../middleware/cors.guard';
 import cookieParser from 'cookie-parser';
-import morganMiddleware from '../middleware/morgan.middleware';
-import exceptionMiddleware from "../middleware/exception.middleware";
+import loggingInterceptor from '../middleware/logging.interceptor';
+import exceptionFilter from "../middleware/exception.filter";
 
 const mode = process.env.NODE_ENV;
 const welcomeMsg =
@@ -30,12 +30,12 @@ if (mode !== 'production') {
     logger.info('🛠️[DEV MODE]: Allow cors for all origin.🛠️');
     server.use(cors());
 } else {
-    //* Production mode: apply cors guard
-    server.use(corsMiddleware); //* CORS Guard
+    //* Production mode: apply cors global guards
+    server.use(corsGuard); //* CORS global Guard
 }
 //
-server.use(morganMiddleware); //* Logger Middleware
-server.use(exceptionMiddleware) //* Exception Middleware
+server.use(loggingInterceptor); //* Logger Middleware
+server.use(exceptionFilter) //* Exception Middleware
 
 /** Third Phase: Apply routers */
 //TODO

@@ -2,7 +2,7 @@ import morgan from 'morgan';
 import { Request, Response } from 'express';
 import logger from '../utils/logger';
 
-const morganMiddleware = morgan((tokens, req: Request, res: Response) => {
+const loggingInterceptor = morgan((tokens, req: Request, res: Response) => {
     const status = res.statusCode;
     const logMessage = `[${tokens.method(req, res)}] ${tokens.url(req, res)} | ${tokens.status(req, res)} - ${tokens['response-time'](req, res)} ms`;
 
@@ -16,4 +16,4 @@ const morganMiddleware = morgan((tokens, req: Request, res: Response) => {
     return null;
 });
 
-export default morganMiddleware;
+export default loggingInterceptor;
