@@ -3,7 +3,7 @@
         {
             "name": "sms-noti-manager",
             "cwd": "./",
-            "script": "dist/server.js",
+            "script": "dist/index.js",
             "watch": true,
             "autorestart": true,
             "exec_mode": "cluster",

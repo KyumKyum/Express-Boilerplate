@@ -17,7 +17,7 @@ COPY --from=builder /app .
 
 ENV NODE_ENV=production
 RUN npm prune --production # Remove Dependencies
-EXPOSE 3000
+EXPOSE ${SERV_PORT}
 
 CMD ["npm", "run", "start:prod"]
 
