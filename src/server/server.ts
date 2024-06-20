@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import config from '../config/config';
+import config from '../env/config';
 import logger from '../utils/logger';
 import corsGuard from '../middleware/cors.guard';
 import cookieParser from 'cookie-parser';
@@ -36,7 +36,6 @@ if (mode !== 'production') {
     //* Production mode: apply cors global guards
     server.use(corsGuard); //* CORS global Guard
 }
-//
 
 /** Third Phase: Apply rest middlewares, remaining guards and interceptors, filters, pipes.*/
 server.use('/', rootController);

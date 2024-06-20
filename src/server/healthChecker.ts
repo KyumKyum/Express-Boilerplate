@@ -2,6 +2,8 @@ import _ from 'lodash';
 
 import { Observable, Subject } from 'rxjs';
 import { SystemStatus } from '../constants/SystemStatus';
+import { initRedis } from '../provider/redis.provider';
+import { redisHcObservable } from '../provider/hc/redis.hc';
 
 export interface StatusIndicator {
     source: Service;
@@ -10,19 +12,21 @@ export interface StatusIndicator {
 
 enum Service {
     SERVER = 'server',
+    REDIS = 'redis',
 }
 
 class HealthChecker {
     private _monitor = new Subject<StatusIndicator>();
     private servicesStatus: { [key in Service]: SystemStatus } = {
         [Service.SERVER]: SystemStatus.FLATLINE,
+        [Service.REDIS]: SystemStatus.FLATLINE,
     };
 
     constructor() {
         this.updateServiceStatus(Service.SERVER, SystemStatus.INITIALIZING);
 
-        // Subscribe to dependent services
-        //this.subscribeSample('sampleService');
+        // bootstrap to dependent services
+        this.bootstrapRedis();
 
         // Start checking the overall system status
         this.updateServiceStatus(Service.SERVER, SystemStatus.BOOTSTRAPPED);
@@ -46,6 +50,24 @@ class HealthChecker {
         if (allServicesAlive) {
             this._monitor.complete(); //* Bootstrapped!
         }
+    }
+
+    private interruptServer(source: Service) {
+        this._monitor.error({ source, status: SystemStatus.FLATLINE });
+    }
+
+    private bootstrapRedis() {
+        redisHcObservable.subscribe({
+            next: (status: SystemStatus) => {
+                this.updateServiceStatus(Service.REDIS, status);
+            },
+            //complete: redundant check
+            error: () => {
+                this.updateServiceStatus(Service.REDIS, SystemStatus.FLATLINE);
+                this.interruptServer(Service.REDIS);
+            },
+        });
+        initRedis();
     }
 }
 
