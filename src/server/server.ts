@@ -26,7 +26,7 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(cookieParser());
 
-/** Second Phase: Apply middlewares, guards and interceptors, router */
+/** Second Phase: Apply Guards and controllers */
 //
 if (mode !== 'production') {
     //* Allow CORS on dev mode
@@ -38,7 +38,7 @@ if (mode !== 'production') {
 }
 //
 
-/** Third Phase: Apply controllers */
+/** Third Phase: Apply rest middlewares, remaining guards and interceptors, filters, pipes.*/
 server.use('/', rootController);
 
 server.use(loggingInterceptor); //* Logger Middleware
