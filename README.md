@@ -24,8 +24,7 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
-```This boilerplate had been inspired by code from [nestjs-boilerplate](https://github.com/brocoders/nestjs-boilerplate). I made this boilerplate for my personal uses.
-
+```
 
 ### Request & Response Logic Flow
 ```text
